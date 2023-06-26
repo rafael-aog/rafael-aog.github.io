@@ -442,18 +442,74 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Rafael Augusto de Oliveira Guedes</h1>
 </div>
 <div id="content">
+<div class="sect1">
+<h2 id="_ufrn_processamento_digital_de_imagens_dca0445">UFRN - Processamento Digital de Imagens (DCA0445)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A seguir, estão apresentados alguns exercícios realizados na disciplica de processamento digital de imagens da UFRN.</p>
+</div>
+<div class="paragraph">
+<p>Primeiramente, foi proposto compilar e executar o programa pixels.cpp, que consiste em abrir uma imagem (bolhas.png) e cobrir uma região com uma coloração qualquer.</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-teste2" data-lang="teste2">cout &lt;&lt; "teste" &lt;&lt; endl;</code></pre>
+<pre class="highlight"><code class="language-teste2" data-lang="teste2">#include &lt;iostream&gt;
+#include &lt;opencv2/opencv.hpp&gt;
+
+int main(int, char**){
+  cv::Mat image;
+  cv::Vec3b val;
+
+  image= cv::imread("bolhas.png",cv::IMREAD_GRAYSCALE);
+  if(!image.data)
+    std::cout &lt;&lt; "nao abriu bolhas.png" &lt;&lt; std::endl;
+
+  cv::namedWindow("janela", cv::WINDOW_AUTOSIZE);
+
+  for(int i=200;i&lt;210;i++){
+    for(int j=10;j&lt;200;j++){
+      image.at&lt;uchar&gt;(i,j)=0;
+    }
+  }
+
+  cv::imshow("janela", image);
+  cv::waitKey();
+
+  image= cv::imread("bolhas.png",cv::IMREAD_COLOR);
+
+  val[0] = 0;   //B
+  val[1] = 0;   //G
+  val[2] = 255; //R
+
+  for(int i=200;i&lt;210;i++){
+    for(int j=10;j&lt;200;j++){
+      image.at&lt;cv::Vec3b&gt;(i,j)=val;
+    }
+  }
+
+  cv::imshow("janela", image);
+  cv::waitKey();
+
+  imwrite("cor_pixels.png", image);
+
+  return 0;
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>aula de std</p>
+<p>Dessa forma, a imagem de saída será como mostrado abaixo.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="PDI/2/cor_pixels.png" alt="Saída" width="250" height="250">
+</div>
+</div>
+</div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-06-26 11:44:40 -0300
+Last updated 2023-06-26 14:19:31 -0300
 </div>
 </div>
 </body>
