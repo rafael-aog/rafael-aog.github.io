@@ -1,0 +1,3 @@
+Solução para mais de 255 elementos: Criar dois contadores (um para quantidade de bolhas/objetos e outro para as cores), inicialmente os dois irão trabalhar igual, porém quando chegarem a 255, o contador das cores zera e recomeça a contageme enquanto o contador da quantidade de objetos continua subindo
+
+Para não contar as bolhas que tocam na borda da imagem, basta verificar se o ponto de análise delas está na linha 0, na coluna 0, na última linha ou na última coluna, caso uma dessas análises seja verdadeira, fazer um floodfill para apagar toda a bolha
