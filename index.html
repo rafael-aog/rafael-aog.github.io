@@ -567,7 +567,7 @@ int main(int, char**){
 <div class="paragraph">
 <p>Utilizando o mesmo código do programa anterior como base, foi realizada a inversão de cores em uma região (especificada pelo usuário), de modo que, ao rodar uma imagem (<a href="#biel">biel.png</a>, nesse caso) e atribuir dois pontos P1 e P2 localizados na imagem, a região retangular de vértices compostas por esses pontos passe a ter o valor negativo da imagem original na região especificada. O código completo é mostrado <a href="#regioes">abaixo</a>.</p>
 </div>
-<div id="biel" class="imageblock png">
+<div id="biel" class="imageblock">
 <div class="content">
 <img src="PDI/2/biel.png" alt="biel" width="250" height="250">
 </div>
@@ -751,7 +751,7 @@ int main(int, char**){
 <div id="trocaregioes_inicio" class="listingblock">
 <div class="title">Início do Código trocaregioes.cpp</div>
 <div class="content">
-<pre class="highlight"><code class="language-trocaregioes.cpp" data-lang="trocaregioes.cpp">#include &lt;iostream&gt;
+<pre class="highlight"><code class="language-trocaregioes_inicio" data-lang="trocaregioes_inicio">#include &lt;iostream&gt;
 #include &lt;opencv2/opencv.hpp&gt;
 
 int main(int, char**){
@@ -779,7 +779,7 @@ int main(int, char**){
 <div id="trocaregioes_final" class="listingblock">
 <div class="title">Final do Código trocaregioes.cpp</div>
 <div class="content">
-<pre class="highlight"><code class="language-trocaregioes.cpp" data-lang="trocaregioes.cpp">cv::Mat l1, l2, imgtrocada;
+<pre class="highlight"><code class="language-trocaregioes_final_" data-lang="trocaregioes_final_">cv::Mat l1, l2, imgtrocada;
   cv::hconcat(q4, q2, l1);
   cv::hconcat(q3, q1, l2);
   cv::vconcat(l1, l2, imgtrocada);
@@ -793,6 +793,21 @@ int main(int, char**){
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>A imagem resultante do processo utilizando a imagem <a href="#biel">original</a> é vista na figura <a href="#biel_trocada">abaixo</a>.</p>
+</div>
+<div id="biel_trocada" class="imageblock">
+<div class="content">
+<img src="PDI/2/trocada.png" alt="biel_trocada" width="250" height="250">
+</div>
+<div class="title">Figure 5. Biel Trocada</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_filestorage">Filestorage</h3>
+<div class="paragraph">
+<p>Utilizando o código fonte filestorage, foi realizada a criação de um programa para gerar uma imagem de 256x256 de uma senoide</p>
 </div>
 </div>
 </div>
@@ -800,7 +815,7 @@ int main(int, char**){
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-06-26 20:05:15 -0300
+Last updated 2023-06-27 09:27:53 -0300
 </div>
 </div>
 </body>
