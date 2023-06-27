@@ -444,29 +444,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Rafael Augusto de Oliveira Guedes</span><br>
 </div>
-<div id="toc" class="toc">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_introdução">Introdução</a>
-<ul class="sectlevel2">
-<li><a href="#_1_manipulando_pixels_em_uma_imagem">1. Manipulando Pixels em uma Imagem</a></li>
-<li><a href="#_2_filestorage">2. Filestorage</a></li>
-</ul>
-</li>
-</ul>
-</div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="_introdução">Introdução</h2>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>A seguir, estão apresentados alguns exercícios realizados na disciplica de processamento digital de imagens da UFRN.</p>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_1_manipulando_pixels_em_uma_imagem">1. Manipulando Pixels em uma Imagem</h2>
+<div class="sectionbody">
 <div class="sect2">
-<h3 id="_1_manipulando_pixels_em_uma_imagem">1. Manipulando Pixels em uma Imagem</h3>
-<div class="sect3">
-<h4 id="_1_1_preenchimento_de_pixels">1.1. Preenchimento de Pixels</h4>
+<h3 id="_1_1_preenchimento_de_pixels">1.1. Preenchimento de Pixels</h3>
 <div class="paragraph">
 <p>Primeiramente, foi proposto compilar e executar o programa <a href="#pixels">pixels.cpp</a>, que consiste em abrir uma imagem (<a href="#bolhas">bolhas.png</a>) e cobrir uma região com uma coloração qualquer.</p>
 </div>
@@ -577,8 +568,8 @@ int main(int, char**){
 <div class="title">Figure 2. Saída do Código</div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_1_2_invertendo_regiões">1.2. Invertendo Regiões</h4>
+<div class="sect2">
+<h3 id="_1_2_invertendo_regiões">1.2. Invertendo Regiões</h3>
 <div class="paragraph">
 <p>Utilizando o mesmo código do programa anterior como base, foi realizada a inversão de cores em uma região (especificada pelo usuário), de modo que, ao rodar uma imagem (<a href="#biel">biel.png</a>, nesse caso) e atribuir dois pontos P1 e P2 localizados na imagem, a região retangular de vértices compostas por esses pontos passe a ter o valor negativo da imagem original na região especificada. O código completo é mostrado <a href="#regioes">abaixo</a>.</p>
 </div>
@@ -698,8 +689,8 @@ int main(int, char**){
 <div class="title">Figure 4. Exemplo de Biel Inversa</div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_1_3_trocando_regiões">1.3. Trocando Regiões</h4>
+<div class="sect2">
+<h3 id="_1_3_trocando_regiões">1.3. Trocando Regiões</h3>
 <div class="paragraph">
 <p>A terceira atividade relacionada a este tópico foi para trocar as regiões de uma figura, para isso, foi utilizada a imagem do <a href="#biel.png">Biel</a> mostrada anteriormente. O código trocaregioes.cpp está listado abaixo.</p>
 </div>
@@ -819,8 +810,10 @@ int main(int, char**){
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_2_filestorage">2. Filestorage</h3>
+</div>
+<div class="sect1">
+<h2 id="_2_filestorage">2. Filestorage</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>Utilizando o <a href="#filestorage">código fonte</a> filestorage, foi realizada a criação de um programa para gerar uma imagem de 256x256 de uma senoide de 4 períodos com amplitude de 127 desenhada na horizontal.</p>
 </div>
@@ -948,10 +941,9 @@ int main(int argc, char** argv) {
 </div>
 </div>
 </div>
-</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-06-27 10:24:19 -0300
+Last updated 2023-06-27 10:31:27 -0300
 </div>
 </div>
 </body>
