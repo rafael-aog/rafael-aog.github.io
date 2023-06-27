@@ -5,7 +5,7 @@
 #include <fstream>
 
 int SIDE = 256;
-int PERIODOS = 8;
+int PERIODOS = 4;
 
 int main(int argc, char** argv) {
   std::stringstream ss_img, ss_yml;
@@ -36,9 +36,9 @@ int main(int argc, char** argv) {
   cv::normalize(image, image, 0, 255, cv::NORM_MINMAX);
   image.convertTo(image, CV_8U);
 
-  std::ofstream arquivosaida("imagem.txt");
+  //std::ofstream arquivosaida("imagem.txt");
 
-  std:: arquivosaida << 
+  //arquivosaida << 
 
   cv::imshow("image", image);
   cv::waitKey();

@@ -805,9 +805,124 @@ int main(int, char**){
 </div>
 </div>
 <div class="sect2">
-<h3 id="_filestorage">Filestorage</h3>
+<h3 id="_2_filestorage">2. Filestorage</h3>
 <div class="paragraph">
-<p>Utilizando o código fonte filestorage, foi realizada a criação de um programa para gerar uma imagem de 256x256 de uma senoide</p>
+<p>Utilizando o <a href="#filestorage">código fonte</a> filestorage, foi realizada a criação de um programa para gerar uma imagem de 256x256 de uma senoide de 4 períodos com amplitude de 127 desenhada na horizontal.</p>
+</div>
+<div id="filestorage" class="listingblock">
+<div class="title">Código Fonte Filestorage</div>
+<div class="content">
+<pre class="highlight"><code class="language-filestorage" data-lang="filestorage">#include &lt;iostream&gt;
+#include &lt;opencv2/opencv.hpp&gt;
+#include &lt;sstream&gt;
+#include &lt;string&gt;
+#include &lt;fstream&gt;
+
+int SIDE = 256;
+int PERIODOS = 4;
+
+int main(int argc, char** argv) {
+  std::stringstream ss_img, ss_yml;
+  cv::Mat image;
+
+  ss_yml &lt;&lt; "senoide-" &lt;&lt; SIDE &lt;&lt; ".yml";
+  image = cv::Mat::zeros(SIDE, SIDE, CV_32FC1);
+
+  cv::FileStorage fs(ss_yml.str(), cv::FileStorage::WRITE);
+
+  for (int i = 0; i &lt; SIDE; i++) {
+    for (int j = 0; j &lt; SIDE; j++) {
+      image.at&lt;float&gt;(i, j) = 127 * sin(2 * M_PI * PERIODOS * j / SIDE) + 128;
+    }
+  }
+
+  fs &lt;&lt; "mat" &lt;&lt; image;
+  fs.release();
+
+  cv::normalize(image, image, 0, 255, cv::NORM_MINMAX);
+  image.convertTo(image, CV_8U);
+  ss_img &lt;&lt; "senoide-" &lt;&lt; SIDE &lt;&lt; ".png";
+  cv::imwrite(ss_img.str(), image);
+
+  fs.open(ss_yml.str(), cv::FileStorage::READ);
+  fs["mat"] &gt;&gt; image;
+
+  cv::normalize(image, image, 0, 255, cv::NORM_MINMAX);
+  image.convertTo(image, CV_8U);
+
+  std::ofstream arquivosaida("imagem.txt");
+
+  std:: arquivosaida &lt;&lt;
+
+  cv::imshow("image", image);
+  cv::waitKey();
+
+  return 0;
+}</code></pre>
+</div>
+</div>
+<div id="filestorage_inicio" class="listingblock">
+<div class="title">Início do Código Filestorage</div>
+<div class="content">
+<pre class="highlight"><code class="language-filestorage" data-lang="filestorage">#include &lt;iostream&gt;
+#include &lt;opencv2/opencv.hpp&gt;
+#include &lt;sstream&gt;
+#include &lt;string&gt;
+#include &lt;fstream&gt;
+
+int SIDE = 256;
+int PERIODOS = 4;
+
+int main(int argc, char** argv) {
+  std::stringstream ss_img, ss_yml;
+  cv::Mat image;
+
+  ss_yml &lt;&lt; "senoide-" &lt;&lt; SIDE &lt;&lt; ".yml";
+  image = cv::Mat::zeros(SIDE, SIDE, CV_32FC1);
+
+  cv::FileStorage fs(ss_yml.str(), cv::FileStorage::WRITE);
+
+  for (int i = 0; i &lt; SIDE; i++) {
+    for (int j = 0; j &lt; SIDE; j++) {
+      image.at&lt;float&gt;(i, j) = 127 * sin(2 * M_PI * PERIODOS * j / SIDE) + 128;
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div id="filestorage_fim" class="listingblock">
+<div class="title">Final do Código Filestorage</div>
+<div class="content">
+<pre class="highlight"><code class="language-filestorage" data-lang="filestorage">  fs &lt;&lt; "mat" &lt;&lt; image;
+  fs.release();
+
+  cv::normalize(image, image, 0, 255, cv::NORM_MINMAX);
+  image.convertTo(image, CV_8U);
+  ss_img &lt;&lt; "senoide-" &lt;&lt; SIDE &lt;&lt; ".png";
+  cv::imwrite(ss_img.str(), image);
+
+  fs.open(ss_yml.str(), cv::FileStorage::READ);
+  fs["mat"] &gt;&gt; image;
+
+  cv::normalize(image, image, 0, 255, cv::NORM_MINMAX);
+  image.convertTo(image, CV_8U);
+
+  std::ofstream arquivosaida("imagem.txt");
+
+  std:: arquivosaida &lt;&lt;
+
+  cv::imshow("image", image);
+  cv::waitKey();
+
+  return 0;
+}</code></pre>
+</div>
+</div>
+<div id="senoide4" class="imageblock">
+<div class="content">
+<img src="PDI/3/senoide-256.png" alt="senoide4" width="250" height="250">
+</div>
+<div class="title">Figure 6. Senoide de 4 Períodos</div>
 </div>
 </div>
 </div>
@@ -815,7 +930,7 @@ int main(int, char**){
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-06-27 09:37:01 -0300
+Last updated 2023-06-27 10:04:09 -0300
 </div>
 </div>
 </body>
