@@ -455,6 +455,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#_2_filestorage">2. Filestorage</a></li>
+<li><a href="#_3_decomposição_de_imagens">3. Decomposição de Imagens</a></li>
 </ul>
 </div>
 </div>
@@ -979,16 +980,80 @@ int main(int argc, char** argv) {
 </div>
 <div id="graphs4" class="imageblock">
 <div class="content">
-<img src="PDI/3/graph-senoide-256.png" alt="graph" width="350" height="350">
+<img src="PDI/3/graph-senoide-256.png" alt="graph" width="500" height="500">
 </div>
 <div class="title">Figure 7. Senoide de 4 Períodos</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_3_decomposição_de_imagens">3. Decomposição de Imagens</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Para a decomposição de imagens em planos de bits, foi realizada uma atividade de descriptar uma figura encriptada (disponibilizada previamente) por esteganografia, a figura encriptada pode ser vista <a href="#desafio-esteg">abaixo</a>. Para encriptografar uma imagem dentro de outra, é coletado os 3 bits mais significativos da imagem que se deseja esconder e inserido nos 3 bits menos significativos da imagem que estará sendo representada. O código de decodificação está mostrado <a href="#Descriptografia">a seguir</a>.</p>
+</div>
+<div id="desafio-esteg" class="imageblock">
+<div class="content">
+<img src="PDI/4/desafio-esteganografia.png" alt="desafio-esteg" width="250" height="250">
+</div>
+<div class="title">Figure 8. Figura Disponibilizada</div>
+</div>
+<div id="Descriptografia" class="listingblock">
+<div class="title">Código Fonte Descriptografia</div>
+<div class="content">
+<pre class="highlight"><code class="language-filestorage" data-lang="filestorage">#include &lt;iostream&gt;
+#include &lt;opencv2/opencv.hpp&gt;
+
+int main(int argc, char**argv) {
+  cv::Mat imagemCodificada, imagemEscondida;
+  cv::Vec3b valCodificada, valEscondida;
+  int nbits = 3;
+
+  imagemCodificada = cv::imread(argv[1], cv::IMREAD_COLOR);
+
+  if (imagemCodificada.empty()) {
+    std::cout &lt;&lt; "imagem nao carregou corretamente" &lt;&lt; std::endl;
+    return (-1);
+  }
+
+  cv::imshow("image", imagemCodificada);
+  cv::waitKey();
+
+  imagemEscondida = imagemCodificada.clone();
+
+  for (int i = 0; i &lt; imagemCodificada.rows; i++) {
+    for (int j = 0; j &lt; imagemCodificada.cols; j++) {
+      valCodificada = imagemCodificada.at&lt;cv::Vec3b&gt;(i, j);
+      valCodificada[1] = valCodificada[1] &lt;&lt; (8-nbits);
+      valCodificada[0] = valCodificada[0] &lt;&lt; (8-nbits);
+      valCodificada[2] = valCodificada[2] &lt;&lt; (8-nbits);
+      valEscondida[0] = valCodificada[0];
+      valEscondida[1] = valCodificada[1];
+      valEscondida[2] = valCodificada[2];
+      imagemEscondida.at&lt;cv::Vec3b&gt;(i, j) = valEscondida;
+    }
+  }
+  imwrite("esteganografia-dec.png", imagemEscondida);
+
+  cv::imshow("image", imagemEscondida);
+  cv::waitKey();
+
+  return 0;
+}</code></pre>
+</div>
+</div>
+<div id="decript" class="imageblock">
+<div class="content">
+<img src="PDI/4/esteganografia-dec.png" alt="desafio-esteg" width="250" height="250">
+</div>
+<div class="title">Figure 9. Figura Escondida</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-07-02 17:39:50 -0300
+Last updated 2023-07-02 19:12:26 -0300
 </div>
 </div>
 </body>
