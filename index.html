@@ -873,7 +873,19 @@ int main(int argc, char** argv) {
 
   std::ofstream arquivosaida("imagem.txt");
 
-  std:: arquivosaida &lt;&lt;
+  int valor;
+
+  for(int i=0; i&lt;image.rows; i++)
+  {
+    for(int j=0; j&lt;image.cols; j++)
+    {
+      valor = image.at&lt;uchar&gt;(i,j);
+      arquivosaida &lt;&lt; valor &lt;&lt; " ";
+    }
+    arquivosaida &lt;&lt; std::endl;
+  }
+
+  arquivosaida.close();
 
   cv::imshow("image", image);
   cv::waitKey();
@@ -883,7 +895,7 @@ int main(int argc, char** argv) {
 </div>
 </div>
 <div class="paragraph">
-<p>Inicialmente&#8230;&#8203;</p>
+<p>Inicialmente, é definido a quantidade de períodos da senoide, assim como o tamanho de pixels. É gerado então uma imagem do tipo yml da senoide com a amplitude de 127.</p>
 </div>
 <div id="filestorage_inicio" class="listingblock">
 <div class="title">Início do Código Filestorage</div>
@@ -910,17 +922,16 @@ int main(int argc, char** argv) {
     for (int j = 0; j &lt; SIDE; j++) {
       image.at&lt;float&gt;(i, j) = 127 * sin(2 * M_PI * PERIODOS * j / SIDE) + 128;
     }
-  }
-}</code></pre>
+  }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Após isso&#8230;&#8203;</p>
+<p>Após isso, a imagem é normalizada para ter valores na faixa de 0 a 255 do tipo png, para coletar os valores desse tipo de imagem, é criada um arquivo do tipo txt e inserido cada um dos valores dos pixels existentes na imagem criada.</p>
 </div>
 <div id="filestorage_fim" class="listingblock">
 <div class="title">Final do Código Filestorage</div>
 <div class="content">
-<pre class="highlight"><code class="language-filestorage" data-lang="filestorage">  fs &lt;&lt; "mat" &lt;&lt; image;
+<pre class="highlight"><code class="language-filestorage" data-lang="filestorage">fs &lt;&lt; "mat" &lt;&lt; image;
   fs.release();
 
   cv::normalize(image, image, 0, 255, cv::NORM_MINMAX);
@@ -936,7 +947,19 @@ int main(int argc, char** argv) {
 
   std::ofstream arquivosaida("imagem.txt");
 
-  std:: arquivosaida &lt;&lt;
+  int valor;
+
+  for(int i=0; i&lt;image.rows; i++)
+  {
+    for(int j=0; j&lt;image.cols; j++)
+    {
+      valor = image.at&lt;uchar&gt;(i,j);
+      arquivosaida &lt;&lt; valor &lt;&lt; " ";
+    }
+    arquivosaida &lt;&lt; std::endl;
+  }
+
+  arquivosaida.close();
 
   cv::imshow("image", image);
   cv::waitKey();
@@ -945,18 +968,27 @@ int main(int argc, char** argv) {
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Por fim, a senoide de 4 períodos gerada pelo programa pode ser vista pela <a href="#senoide4">imagem</a> abaixo, assim como o <a href="#graphs4">gráfico</a> com a diferença dos valores entre as imagens do tipo yml e png.</p>
+</div>
 <div id="senoide4" class="imageblock">
 <div class="content">
 <img src="PDI/3/senoide-256.png" alt="senoide4" width="250" height="250">
 </div>
 <div class="title">Figure 6. Senoide de 4 Períodos</div>
 </div>
+<div id="graphs4" class="imageblock">
+<div class="content">
+<img src="PDI/3/graph-senoide-256.png" alt="graph" width="350" height="350">
+</div>
+<div class="title">Figure 7. Senoide de 4 Períodos</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-06-28 11:19:01 -0300
+Last updated 2023-07-02 17:39:50 -0300
 </div>
 </div>
 </body>

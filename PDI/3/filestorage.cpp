@@ -36,10 +36,22 @@ int main(int argc, char** argv) {
   cv::normalize(image, image, 0, 255, cv::NORM_MINMAX);
   image.convertTo(image, CV_8U);
 
-  //std::ofstream arquivosaida("imagem.txt");
+  std::ofstream arquivosaida("imagem.txt");
 
-  //arquivosaida << 
+  int valor;
 
+  for(int i=0; i<image.rows; i++)
+  {
+    for(int j=0; j<image.cols; j++)
+    {
+      valor = image.at<uchar>(i,j);
+      arquivosaida << valor << " ";
+    }
+    arquivosaida << std::endl;
+  }
+
+  arquivosaida.close();
+  
   cv::imshow("image", image);
   cv::waitKey();
 
