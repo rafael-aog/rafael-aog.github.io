@@ -462,7 +462,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>A seguir, estão apresentados alguns exercícios realizados na disciplica de processamento digital de imagens da UFRN.</p>
 </div>
 </div>
@@ -472,7 +472,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_1_1_preenchimento_de_pixels">1.1. Preenchimento de Pixels</h3>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Primeiramente, foi proposto compilar e executar o programa <a href="#pixels">pixels.cpp</a>, que consiste em abrir uma imagem (<a href="#bolhas">bolhas.png</a>) e cobrir uma região com uma coloração qualquer.</p>
 </div>
 <div id="bolhas" class="imageblock png">
@@ -527,7 +527,7 @@ int main(int, char**){
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Inicialmente é aberta uma imagem (<a href="#bolhas">bolhas.png</a>, nesse caso) e é feita a verificação se a imagem foi aberta corretamente, para mostrar na tela. Caso não seja possível abrir a imagem corretamente, é mostrado um aviso de erro.</p>
 </div>
 <div id="pixels_incio" class="listingblock cpp">
@@ -547,7 +547,7 @@ int main(int, char**){
   cv::namedWindow("janela", cv::WINDOW_AUTOSIZE);</code></pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Após isso, é realizado um preenchimento na cor preta (<em>image.at&lt;uchar&gt;(i,j)=0</em>), inicializando da linha 200 e coluna 10, e percorrendo até a linha 210 e coluna 200, a imagem resultante é mostrado em tela. Posteriormente, a mesma imagem é lida no formato colorido (<em>IMREAD_COLOR</em>) e, no mesmo local de preenchimento da cor preta, foi feito o preenchimento na cor vermelha, como indicado a imagem de <a href="#bolhas_preenchidas">saída</a>.</p>
 </div>
 <div id="pixels_final" class="listingblock cpp">
@@ -584,7 +584,7 @@ int main(int, char**){
 </div>
 <div class="sect2">
 <h3 id="_1_2_invertendo_regiões">1.2. Invertendo Regiões</h3>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Utilizando o mesmo código do programa anterior como base, foi realizada a inversão de cores em uma região (especificada pelo usuário), de modo que, ao rodar uma imagem (<a href="#biel">biel.png</a>, nesse caso) e atribuir dois pontos P1 e P2 localizados na imagem, a região retangular de vértices compostas por esses pontos passe a ter o valor negativo da imagem original na região especificada. O código completo é mostrado <a href="#regioes">abaixo</a>.</p>
 </div>
 <div id="biel" class="imageblock">
@@ -638,7 +638,7 @@ int main(int, char**){
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Após a imagem ser aberta, é solicitado ao usuário o preenchimento das posições <em>x</em> e <em>y</em> dos pontos P1 e P2, respectivamente.</p>
 </div>
 <div id="regioes_inicio" class="listingblock cpp">
@@ -670,7 +670,7 @@ int main(int, char**){
   std::cin &gt;&gt; P2y;</code></pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Por fim, é mostrada a imagem original, e depois é realizada uma varredura dentro da região especificada pelos pontos, cada <em>pixel</em> dentro da região recebe o seu valor invertido, obtido através da subtração do valor máximo que um <em>pixel</em> pode assumir (255), menos o valor atual do <em>pixel</em> analisado. Após percorrer toda a região retangular, a imagem final é mostrada.</p>
 </div>
 <div id="regioes_final" class="listingblock cpp">
@@ -705,7 +705,7 @@ int main(int, char**){
 </div>
 <div class="sect2">
 <h3 id="_1_3_trocando_regiões">1.3. Trocando Regiões</h3>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>A terceira atividade relacionada a este tópico foi para trocar as regiões de uma figura, para isso, foi utilizada a imagem do <a href="#biel.png">Biel</a> mostrada anteriormente. O código trocaregioes.cpp está listado abaixo.</p>
 </div>
 <div id="trocaregioes" class="listingblock">
@@ -746,10 +746,10 @@ int main(int, char**){
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Esse código consiste em dividir a imagem em 4 quadrantes e inverter a posição deles (<em>q1</em> com <em>q4</em> e <em>q2</em> com <em>q3</em>). Inicialmente, após a imagem ser aberta, é armazenado o tamanho da imagem, que indica a quantidade de linhas e colunas presentes na figura aberta. É feita a separação dos quadrantes da imagem da seguinte maneira:</p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p><em>q1</em>: Começa da primeira linha e primeira coluna da imagem (<em>0</em>, <em>0</em>) e se extende até a metade da figura (<em>nlinhas/2</em>, <em>ncolunas/2</em>);</p>
@@ -765,7 +765,7 @@ int main(int, char**){
 </li>
 </ul>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p><strong>Obs.: A distância sempre é dividida por 2 pelo fato do código estar indicando o tamanho que será percorrido para cortar os quadrantes, não necessariamente ao exato pixel inicial e final.</strong></p>
 </div>
 <div id="trocaregioes_inicio" class="listingblock">
@@ -793,7 +793,7 @@ int main(int, char**){
   cv:: Mat q4 = image(cv::Rect(tam.height/2, tam.width/2, tam.width/2, tam.height/2));</code></pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Para trocar os valores das regiões da figura, é utilizada a função de concatenação de matrizes, onde na primeira metade (<em>l1</em>) estarão os quadrantes <em>q2</em> e <em>q4</em>, e na segunda metade (<em>l2</em>) estarão os quadrantes <em>q3</em> e <em>q1</em>.</p>
 </div>
 <div id="trocaregioes_final" class="listingblock">
@@ -813,7 +813,7 @@ int main(int, char**){
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>A imagem resultante do processo utilizando a imagem <a href="#biel">original</a> é vista na figura <a href="#biel_trocada">abaixo</a>.</p>
 </div>
 <div id="biel_trocada" class="imageblock">
@@ -828,7 +828,7 @@ int main(int, char**){
 <div class="sect1">
 <h2 id="_2_filestorage">2. Filestorage</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Utilizando o <a href="#filestorage">código fonte</a> filestorage, foi realizada a criação de um programa para gerar uma imagem de 256x256 de uma senoide de 4 períodos com amplitude de 127 desenhada na horizontal.</p>
 </div>
 <div id="filestorage" class="listingblock">
@@ -895,7 +895,7 @@ int main(int argc, char** argv) {
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Inicialmente, é definido a quantidade de períodos da senoide, assim como o tamanho de pixels. É gerado então uma imagem do tipo yml da senoide com a amplitude de 127.</p>
 </div>
 <div id="filestorage_inicio" class="listingblock">
@@ -926,7 +926,7 @@ int main(int argc, char** argv) {
   }</code></pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Após isso, a imagem é normalizada para ter valores na faixa de 0 a 255 do tipo png, para coletar os valores desse tipo de imagem, é criada um arquivo do tipo txt e inserido cada um dos valores dos pixels existentes na imagem criada.</p>
 </div>
 <div id="filestorage_fim" class="listingblock">
@@ -969,7 +969,7 @@ int main(int argc, char** argv) {
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Por fim, a senoide de 4 períodos gerada pelo programa pode ser vista pela <a href="#senoide4">imagem</a> abaixo, assim como o <a href="#graphs4">gráfico</a> com a diferença dos valores entre as imagens do tipo yml e png.</p>
 </div>
 <div id="senoide4" class="imageblock">
@@ -989,7 +989,7 @@ int main(int argc, char** argv) {
 <div class="sect1">
 <h2 id="_3_decomposição_de_imagens">3. Decomposição de Imagens</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Para a decomposição de imagens em planos de bits, foi realizada uma atividade de descriptar uma figura encriptada (disponibilizada previamente) por esteganografia, a figura encriptada pode ser vista <a href="#desafio-esteg">abaixo</a>. Para encriptografar uma imagem dentro de outra, é coletado os 3 bits mais significativos da imagem que se deseja esconder e inserido nos 3 bits menos significativos da imagem que estará sendo representada. O código de decodificação está mostrado <a href="#Descriptografia">a seguir</a>.</p>
 </div>
 <div id="desafio-esteg" class="imageblock">
@@ -1042,6 +1042,64 @@ int main(int argc, char**argv) {
 }</code></pre>
 </div>
 </div>
+<div class="paragraph text-justify">
+<p>Primeiramente é aberta e a mostrada em tela a imagem codificada, como descrito <a href="#Descriptografia_inicio">abaixo</a>. Após isso, é realizada uma cópia da imagem para uma matriz onde será salva a imagem escondida.</p>
+</div>
+<div id="Descriptografia_inicio" class="listingblock">
+<div class="title">Início do Código Descriptografia</div>
+<div class="content">
+<pre class="highlight"><code class="language-filestorage" data-lang="filestorage">#include &lt;iostream&gt;
+#include &lt;opencv2/opencv.hpp&gt;
+
+int main(int argc, char**argv) {
+  cv::Mat imagemCodificada, imagemEscondida;
+  cv::Vec3b valCodificada, valEscondida;
+  int nbits = 3;
+
+  imagemCodificada = cv::imread(argv[1], cv::IMREAD_COLOR);
+
+  if (imagemCodificada.empty()) {
+    std::cout &lt;&lt; "imagem nao carregou corretamente" &lt;&lt; std::endl;
+    return (-1);
+  }
+
+  cv::imshow("image", imagemCodificada);
+  cv::waitKey();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph text-justify">
+<p>Assim como dito inicialmente, os 3 bits mais significativos da imagem escondida estão localizados nos 3 bits menos significatvios da <a href="#desafio-esteg">figura principal</a>, então é realizado um deslocamento à esquerda de 5 bits da imagem principal, de modo que sejam posicionados os bits da figura escondida para representá-la correntamente, como a figura é do tipo RGB, o deslocamento é necessário para os três tipos de cor.</p>
+</div>
+<div class="paragraph text-justify">
+<p>Por fim, a imagem que estava por trás da figura disponibilizada é salva como PNG e mostrado em tela, como pode ser observada na <a href="#decript">figura abaixo</a>.</p>
+</div>
+<div id="Descriptografia_final" class="listingblock">
+<div class="title">Final do Código Descriptografia</div>
+<div class="content">
+<pre class="highlight"><code class="language-filestorage" data-lang="filestorage">  imagemEscondida = imagemCodificada.clone();
+
+  for (int i = 0; i &lt; imagemCodificada.rows; i++) {
+    for (int j = 0; j &lt; imagemCodificada.cols; j++) {
+      valCodificada = imagemCodificada.at&lt;cv::Vec3b&gt;(i, j);
+      valCodificada[1] = valCodificada[1] &lt;&lt; (8-nbits);
+      valCodificada[0] = valCodificada[0] &lt;&lt; (8-nbits);
+      valCodificada[2] = valCodificada[2] &lt;&lt; (8-nbits);
+      valEscondida[0] = valCodificada[0];
+      valEscondida[1] = valCodificada[1];
+      valEscondida[2] = valCodificada[2];
+      imagemEscondida.at&lt;cv::Vec3b&gt;(i, j) = valEscondida;
+    }
+  }
+  imwrite("esteganografia-dec.png", imagemEscondida);
+
+  cv::imshow("image", imagemEscondida);
+  cv::waitKey();
+
+  return 0;
+}</code></pre>
+</div>
+</div>
 <div id="decript" class="imageblock">
 <div class="content">
 <img src="PDI/4/esteganografia-dec.png" alt="desafio-esteg" width="250" height="250">
@@ -1053,7 +1111,7 @@ int main(int argc, char**argv) {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-07-02 19:12:26 -0300
+Last updated 2023-07-03 14:23:31 -0300
 </div>
 </div>
 </body>
