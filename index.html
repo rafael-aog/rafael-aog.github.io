@@ -462,6 +462,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_4_2_cena_com_mais_de_255_objetos">4.2. Cena com Mais de 255 Objetos</a></li>
 </ul>
 </li>
+<li><a href="#_5_manipulação_de_histograma">5. Manipulação de Histograma</a></li>
+<li><a href="#_6_filtragem_no_domínio_espacial_i">6. Filtragem no Domínio Espacial I</a></li>
+<li><a href="#_7_filtragem_no_domínio_espacial_ii">7. Filtragem no Domínio Espacial II</a></li>
+<li><a href="#_8_espectro_de_magnitude">8. Espectro de Magnitude</a></li>
 </ul>
 </div>
 </div>
@@ -1325,10 +1329,156 @@ int main(int argc, char** argv) {
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_5_manipulação_de_histograma">5. Manipulação de Histograma</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_6_filtragem_no_domínio_espacial_i">6. Filtragem no Domínio Espacial I</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_7_filtragem_no_domínio_espacial_ii">7. Filtragem no Domínio Espacial II</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_8_espectro_de_magnitude">8. Espectro de Magnitude</h2>
+<div class="sectionbody">
+<div class="paragraph text-justify">
+<p>Para calcular o espectro de magnitude de uma determinada imagem, foi disponibilizado previamente o código, a imagem que foi traçado os espectros de magnitude e fase é a <a href="#senoide_orig">senoide</a>. O código previamente disponibilizado pode ser visto <a href="#dft_completo">a seguir</a>.</p>
+</div>
+<div id="senoide_orig" class="imageblock">
+<div class="content">
+<img src="PDI/9/senoide.png" alt="sen" width="250" height="250">
+</div>
+<div class="title">Figure 13. Senoide</div>
+</div>
+<div id="dft_completo" class="listingblock">
+<div class="title">Código Completo da DFT</div>
+<div class="content">
+<pre class="highlight"><code class="language-filestorage" data-lang="filestorage">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;opencv2/opencv.hpp&gt;
+
+void swapQuadrants(cv::Mat&amp; image) {
+  cv::Mat tmp, A, B, C, D;
+
+  // se a imagem tiver tamanho impar, recorta a regiao para o maior
+  // tamanho par possivel (-2 = 1111...1110)
+  image = image(cv::Rect(0, 0, image.cols &amp; -2, image.rows &amp; -2));
+
+  int centerX = image.cols / 2;
+  int centerY = image.rows / 2;
+
+  // rearranja os quadrantes da transformada de Fourier de forma que
+  // a origem fique no centro da imagem
+  // A B   -&gt;  D C
+  // C D       B A
+  A = image(cv::Rect(0, 0, centerX, centerY));
+  B = image(cv::Rect(centerX, 0, centerX, centerY));
+  C = image(cv::Rect(0, centerY, centerX, centerY));
+  D = image(cv::Rect(centerX, centerY, centerX, centerY));
+
+  // swap quadrants (Top-Left with Bottom-Right)
+  A.copyTo(tmp);
+  D.copyTo(A);
+  tmp.copyTo(D);
+
+  // swap quadrant (Top-Right with Bottom-Left)
+  C.copyTo(tmp);
+  B.copyTo(C);
+  tmp.copyTo(B);
+}
+
+int main(int argc, char** argv) {
+  cv::Mat image, padded, complexImage;
+  std::vector&lt;cv::Mat&gt; planos;
+
+  image = imread(argv[1], cv::IMREAD_GRAYSCALE);
+  if (image.empty()) {
+    std::cout &lt;&lt; "Erro abrindo imagem" &lt;&lt; argv[1] &lt;&lt; std::endl;
+    return EXIT_FAILURE;
+  }
+
+  // expande a imagem de entrada para o melhor tamanho no qual a DFT pode ser
+  // executada, preenchendo com zeros a lateral inferior direita.
+  int dft_M = cv::getOptimalDFTSize(image.rows);
+  int dft_N = cv::getOptimalDFTSize(image.cols);
+  cv::copyMakeBorder(image, padded, 0, dft_M - image.rows, 0, dft_N - image.cols, cv::BORDER_CONSTANT, cv::Scalar::all(0));
+
+  // prepara a matriz complexa para ser preenchida
+  // primeiro a parte real, contendo a imagem de entrada
+  planos.push_back(cv::Mat_&lt;float&gt;(padded));
+  // depois a parte imaginaria com valores nulos
+  planos.push_back(cv::Mat::zeros(padded.size(), CV_32F));
+
+  // combina os planos em uma unica estrutura de dados complexa
+  cv::merge(planos, complexImage);
+
+  // calcula a DFT
+  cv::dft(complexImage, complexImage);
+  swapQuadrants(complexImage);
+
+  // planos[0] : Re(DFT(image)
+  // planos[1] : Im(DFT(image)
+  cv::split(complexImage, planos);
+
+  // calcula o espectro de magnitude e de fase (em radianos)
+  cv::Mat magn, fase;
+  cv::cartToPolar(planos[0], planos[1], magn, fase, false);
+  cv::normalize(fase, fase, 0, 1, cv::NORM_MINMAX);
+
+  // caso deseje apenas o espectro de magnitude da DFT, use:
+  cv::magnitude(planos[0], planos[1], magn);
+
+  // some uma constante para evitar log(0)
+  // log(1 + sqrt(Re(DFT(image))^2 + Im(DFT(image))^2))
+  magn += cv::Scalar::all(1);
+
+  // calcula o logaritmo da magnitude para exibir
+  // com compressao de faixa dinamica
+  log(magn, magn);
+  cv::normalize(magn, magn, 0, 1, cv::NORM_MINMAX);
+
+  // exibe as imagens processadas
+  cv::imshow("Imagem", image);
+  cv::imshow("Espectro de magnitude", magn);
+  cv::imwrite("mag.png", magn);
+  cv::imshow("Espectro de fase", fase);
+  cv::imwrite("fase.png", fase);
+
+  cv::waitKey();
+  return EXIT_SUCCESS;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Dessa forma, os espectros de magnitude e fase da senoide podem ser vistos abaixo.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="PDI/9/mag.png" alt="mag" width="250" height="250">
+</div>
+<div class="title">Figure 14. Espectro de Magnitude</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="PDI/9/fase.png" alt="fase" width="250" height="250">
+</div>
+<div class="title">Figure 15. Espectro de Fase</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-07-17 21:30:37 -0300
+Last updated 2023-07-18 17:39:34 -0300
 </div>
 </div>
 </body>

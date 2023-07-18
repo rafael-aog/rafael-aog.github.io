@@ -1,10 +1,11 @@
 #include <iostream>
 #include <cstdio>
 #include <opencv2/opencv.hpp>
+#include <cmath>
 
-double alfa;
+double alt, alp;
 int alt_slider = 0;
-int alt_slider_max;
+int alt_slider_max = 100;
 
 int dec_slider = 0;
 int dec_slider_max = 100;
@@ -17,41 +18,63 @@ cv::Mat imageTop;
 
 char TrackbarName[50];
 
-void on_trackbar_blend(int, void*){
- alfa = (double) alfa_slider/alfa_slider_max ;
- cv::addWeighted(image1, 1-alfa, imageTop, alfa, 0.0, blended);
- cv::imshow("addweighted", blended);
+double alfa(double x, double l1, double l2, double d)
+{
+  double aux1, aux2;
+
+  aux1 = tanh((x-l1)/d);
+  aux2 = tanh((x-l2)/d);
+
+  return 0.5*(aux1 - aux2);
 }
 
-void on_trackbar_line(int, void*){
-  image1.copyTo(imageTop);
-  int limit = top_slider*255/100;
-  if(limit > 0){
-    cv::Mat tmp = image2(cv::Rect(0, 0, 256, limit));
-    tmp.copyTo(imageTop(cv::Rect(0, 0, 256, limit)));
+void on_trackbar_alt(int, void*){
+ alt = (double) alt_slider/alt_slider_max;
+
+  for(int i=0; i<image1.rows; i++)
+  {
+    alp = alfa(i,dec_slider, foco_slider, alt);
+    addWeighted(image1, 1-alp, imageTop, alp, 0.0, blended);
   }
-  on_trackbar_blend(alfa_slider,0);
+ cv::imshow("tilshift", blended);
+}
+
+void on_trackbar_dec(int, void*){
+ for(int i=0; i<image1.rows; i++)
+  {
+    alp = alfa(i,dec_slider, foco_slider, alt);
+    addWeighted(image1, 1-alp, imageTop, alp, 0.0, blended);
+  }
+ cv::imshow("tilshift", blended);
+}
+
+void on_trackbar_foco(int, void*){
+ for(int i=0; i<image1.rows; i++)
+  {
+    alp = alfa(i,dec_slider, foco_slider, alt);
+    addWeighted(image1, 1-alp, imageTop, alp, 0.0, blended);
+  }
+ cv::imshow("tilshift", blended);
 }
 
 int main(int argvc, char** argv){
-  image1 = cv::imread("blend1.jpg");
-  image2 = cv::imread("blend2.jpg");
+  image1 = cv::imread("ponderacao.png",cv::IMREAD_GRAYSCALE);
+  image2 = cv::imread("Multidao.png",cv::IMREAD_GRAYSCALE);
+
   image2.copyTo(imageTop);
-  cv::namedWindow("addweighted", 1);
+  cv::namedWindow("tiltshift", 1);
+
+  std::sprintf( TrackbarName, "Altura x %d", alt_slider_max );
+  cv::createTrackbar( TrackbarName, "tiltshift", &alt_slider, alt_slider_max, on_trackbar_alt);
+  on_trackbar_alt(alt_slider, 0 );
   
-  std::sprintf( TrackbarName, "Alpha x %d", alfa_slider_max );
-  cv::createTrackbar( TrackbarName, "addweighted",
-                      &alfa_slider,
-                      alfa_slider_max,
-                      on_trackbar_blend );
-  on_trackbar_blend(alfa_slider, 0 );
-  
-  std::sprintf( TrackbarName, "Scanline x %d", top_slider_max );
-  cv::createTrackbar( TrackbarName, "addweighted",
-                      &top_slider,
-                      top_slider_max,
-                      on_trackbar_line );
-  on_trackbar_line(top_slider, 0 );
+  std::sprintf( TrackbarName, "Decaimento x %d", dec_slider_max );
+  cv::createTrackbar( TrackbarName, "tiltshift", &dec_slider, dec_slider_max, on_trackbar_dec);
+  on_trackbar_dec(dec_slider, 0 );
+
+  std::sprintf( TrackbarName, "Foco x %d", foco_slider_max );
+  cv::createTrackbar( TrackbarName, "tiltshift", &foco_slider, foco_slider_max, on_trackbar_foco);
+  on_trackbar_foco(foco_slider, 0 );
 
   cv::waitKey(0);
   return 0;
