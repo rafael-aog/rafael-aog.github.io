@@ -466,6 +466,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_6_filtragem_no_domínio_espacial_i">6. Filtragem no Domínio Espacial I</a></li>
 <li><a href="#_7_filtragem_no_domínio_espacial_ii">7. Filtragem no Domínio Espacial II</a></li>
 <li><a href="#_8_espectro_de_magnitude">8. Espectro de Magnitude</a></li>
+<li><a href="#_9_filtro_homomórifco">9. Filtro Homomórifco</a></li>
+<li><a href="#_10_técnica_de_pontilhismo_com_canny">10. Técnica de Pontilhismo com Canny</a></li>
 </ul>
 </div>
 </div>
@@ -1458,7 +1460,7 @@ int main(int argc, char** argv) {
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Dessa forma, os espectros de magnitude e fase da senoide podem ser vistos abaixo.</p>
 </div>
 <div class="imageblock">
@@ -1475,10 +1477,155 @@ int main(int argc, char** argv) {
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_9_filtro_homomórifco">9. Filtro Homomórifco</h2>
+<div class="sectionbody">
+<div class="paragraph text-justify">
+<p>O exercício proposto a respeito da filtragem homomórifca, que tem a intenção de melhorar a iluminação de uma figura, foi utilizada a foto do <a href="#biel">Biel</a> para este exemplo. O código disponibilizado previamente está mostrado a seguir.</p>
+</div>
+<div id="filt_homomorfico" class="listingblock">
+<div class="title">Código Completo do Filtro Homomórfico</div>
+<div class="content">
+<pre class="highlight"><code class="language-filestorage" data-lang="filestorage">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;opencv2/opencv.hpp&gt;
+
+void swapQuadrants(cv::Mat&amp; image) {
+  cv::Mat tmp, A, B, C, D;
+
+  // se a imagem tiver tamanho impar, recorta a regiao para o maior
+  // tamanho par possivel (-2 = 1111...1110)
+  image = image(cv::Rect(0, 0, image.cols &amp; -2, image.rows &amp; -2));
+
+  int centerX = image.cols / 2;
+  int centerY = image.rows / 2;
+
+  // rearranja os quadrantes da transformada de Fourier de forma que
+  // a origem fique no centro da imagem
+  // A B   -&gt;  D C
+  // C D       B A
+  A = image(cv::Rect(0, 0, centerX, centerY));
+  B = image(cv::Rect(centerX, 0, centerX, centerY));
+  C = image(cv::Rect(0, centerY, centerX, centerY));
+  D = image(cv::Rect(centerX, centerY, centerX, centerY));
+
+  // swap quadrants (Top-Left with Bottom-Right)
+  A.copyTo(tmp);
+  D.copyTo(A);
+  tmp.copyTo(D);
+
+  // swap quadrant (Top-Right with Bottom-Left)
+  C.copyTo(tmp);
+  B.copyTo(C);
+  tmp.copyTo(B);
+}
+
+void makeFilter(const cv::Mat &amp;image, cv::Mat &amp;filter){
+  cv::Mat_&lt;float&gt; filter2D(image.rows, image.cols);
+  int centerX = image.cols / 2;
+  int centerY = image.rows / 2;
+  float gh = 1.0;
+  float gl = 0.5;
+  float c = 1.0;
+  float D, H;
+
+  for (int i = 0; i &lt; image.rows; i++) {
+    for (int j = 0; j &lt; image.cols; j++) {
+      D = sqrt(pow(i-centerY, 2) + pow(j-centerX, 2));
+      H = (gh-gl) * (1.0-exp(-c * pow(D, 2)));
+      filter2D.at&lt;float&gt;(i, j) = H;
+    }
+  }
+
+  cv::Mat planes[] = {cv::Mat_&lt;float&gt;(filter2D), cv::Mat::zeros(filter2D.size(), CV_32F)};
+  cv::merge(planes, 2, filter);
+}
+
+int main(int argc, char** argv) {
+  cv::Mat image, padded, complexImage;
+  std::vector&lt;cv::Mat&gt; planos;
+
+  image = imread(argv[1], cv::IMREAD_GRAYSCALE);
+  if (image.empty()) {
+    std::cout &lt;&lt; "Erro abrindo imagem" &lt;&lt; argv[1] &lt;&lt; std::endl;
+    return EXIT_FAILURE;
+  }
+
+  // expande a imagem de entrada para o melhor tamanho no qual a DFT pode ser
+  // executada, preenchendo com zeros a lateral inferior direita.
+  int dft_M = cv::getOptimalDFTSize(image.rows);
+  int dft_N = cv::getOptimalDFTSize(image.cols);
+  cv::copyMakeBorder(image, padded, 0, dft_M - image.rows, 0, dft_N - image.cols, cv::BORDER_CONSTANT, cv::Scalar::all(0));
+
+  // prepara a matriz complexa para ser preenchida
+  // primeiro a parte real, contendo a imagem de entrada
+  planos.push_back(cv::Mat_&lt;float&gt;(padded));
+  // depois a parte imaginaria com valores nulos
+  planos.push_back(cv::Mat::zeros(padded.size(), CV_32F));
+
+  // combina os planos em uma unica estrutura de dados complexa
+  cv::merge(planos, complexImage);
+
+  // calcula a DFT
+  cv::dft(complexImage, complexImage);
+  swapQuadrants(complexImage);
+
+  // cria o filtro ideal e aplica a filtragem de frequencia
+  cv::Mat filter;
+  makeFilter(complexImage, filter);
+  cv::mulSpectrums(complexImage, filter, complexImage, 0);
+
+  // calcula a DFT inversa
+  swapQuadrants(complexImage);
+  cv::idft(complexImage, complexImage);
+
+  // planos[0] : Re(DFT(image)
+  // planos[1] : Im(DFT(image)
+  cv::split(complexImage, planos);
+
+  // recorta a imagem filtrada para o tamanho original
+  // selecionando a regiao de interesse (roi)
+  cv::Rect roi(0, 0, image.cols, image.rows);
+  cv::Mat result = planos[0](roi);
+
+  // normaliza a parte real para exibicao
+  cv::normalize(result, result, 0, 1, cv::NORM_MINMAX);
+
+  cv::imshow("image", result);
+  cv::imwrite("dft-filter.png", result * 255);
+
+  cv::waitKey();
+  return EXIT_SUCCESS;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph text-justify">
+<p>Para comparar a diferença das iluminações das imagens, é possível ver como a foto do Biel era <a href="#biel_original">antes</a> e como ficou após passar pela <a href="#homomorfica">filtragem</a>.</p>
+</div>
+<div id="biel_original" class="imageblock">
+<div class="content">
+<img src="PDI/10/biel.png" alt="biel_orig" width="250" height="250">
+</div>
+<div class="title">Figure 16. Foto do Biel Antes da Filtragem</div>
+</div>
+<div id="homomorfica" class="imageblock">
+<div class="content">
+<img src="PDI/10/dft-filter.png" alt="biel_filt" width="250" height="250">
+</div>
+<div class="title">Figure 17. Foto do Biel Depois da Filtragem</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_10_técnica_de_pontilhismo_com_canny">10. Técnica de Pontilhismo com Canny</h2>
+<div class="sectionbody">
+
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-07-18 17:39:34 -0300
+Last updated 2023-07-18 18:16:41 -0300
 </div>
 </div>
 </body>
